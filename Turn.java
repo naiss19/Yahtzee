@@ -8,6 +8,7 @@ public class Turn {
         rollNum = 3;
     }
     public void roll(Dice[] dice) {
+        rollNum--;
         for (int i = 0; i < dice.length; i++) {
             dice[i].setNum((int) ((Math.random() * (6 - 1)) + 1));
         }
@@ -24,7 +25,7 @@ public class Turn {
         straightSmall(dice);
         straightLarge(dice);
         yahtzee(dice);
-        rollNum--;
+        
     }
 
     public int checkDiceSimple(Dice[] dice, int num) {
