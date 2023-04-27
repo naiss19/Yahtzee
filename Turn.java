@@ -64,8 +64,6 @@ public class Turn {
 
 
 
-
-
     public int threeKind(Dice[] dice) {
         return 0;
     }
