@@ -3,12 +3,14 @@
  * 
  */
 public class MainFrame extends javax.swing.JFrame {
-
+    Game g;
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
+        g = new Game();
         initComponents();
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -33,6 +35,7 @@ public class MainFrame extends javax.swing.JFrame {
         dice5Image = new javax.swing.JLabel();
         button = new javax.swing.JButton();
         rollsLeftLabel = new javax.swing.JLabel();
+        
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -158,7 +161,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         rollsLeftLabel.setFont(new java.awt.Font("Eras Medium ITC", 0, 18)); // NOI18N
-        rollsLeftLabel.setText("Rolls Left:");
+        rollsLeftLabel.setText("Rolls Left:" + String.valueOf(g.t.rollNum));
 
         javax.swing.GroupLayout gamePanelLayout = new javax.swing.GroupLayout(gamePanel);
         gamePanel.setLayout(gamePanelLayout);
@@ -215,7 +218,8 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>
 
     private void buttonActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        g.play();
+
     }
 
     private void dice1BoxActionPerformed(java.awt.event.ActionEvent evt) {
