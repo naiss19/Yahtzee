@@ -3,6 +3,10 @@ public class Game {
     Turn t;
     int turnNum;
     int totalPoints;
+    int upperPoint;
+    int lowerPoint;
+
+    boolean[] isScored = new boolean[15];
 
 
     public void next() {
@@ -23,6 +27,8 @@ public class Game {
       t = new Turn();
       turnNum = 13;
       totalPoints = 0;
+      upperPoint = 0;
+      lowerPoint = 0;
     }
 
 public int checker(int condition) {
@@ -36,7 +42,6 @@ public int checker(int condition) {
 
     public void play() {
         t.roll(allDice);
-
     }
 
     public Dice[] getAllDice() {
@@ -45,6 +50,20 @@ public int checker(int condition) {
     public void setAllDice(Dice[] allDice) {
         this.allDice = allDice;
     }
+
+    public void setDice(int index, int value)
+    {
+        this.allDice[index].setNum(value);
+    }
+
+    public void clearDice()
+    {
+        for (int i=0; i<5; i++)
+        {
+            this.allDice[i].setSaved(false);
+        }
+    }
+
     public Turn getT() {
         return t;
     }

@@ -1,7 +1,11 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.*;
 import javax.swing.table.*;
+
+import static java.lang.Integer.parseInt;
 
 /**
  * Yahtzee Final Project
@@ -76,82 +80,40 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
             public void mouseClicked(MouseEvent e) {
 
                 int row = table1.rowAtPoint(e.getPoint());
-                int col = table1.columnAtPoint(e.getPoint());
-
-                if (row >= 0 && col == 0) {
-                    Object cellValue = table1.getValueAt(row, col);
-                    switch (row) {
-                        case 0:
-                            int checked = g.checker(1);
-                            if (checked != 0) {
-                                table1.setValueAt(checked, row, 1);
-                            }
-
-                            System.out.println(checked);
-                            break;
-                        case 1:
-                            g.totalPoints += g.t.ones(g.allDice);
-                            table1.setValueAt(g.t.ones(g.allDice), row, 1);
-                            System.out.println(g.t.ones(g.allDice));
-                            break;
-                        case 2:
-                            g.totalPoints += g.t.ones(g.allDice);
-                            table1.setValueAt(g.t.ones(g.allDice), row, 1);
-                            System.out.println(g.t.ones(g.allDice));
-                            break;
-                        case 3:
-                            g.totalPoints += g.t.ones(g.allDice);
-                            table1.setValueAt(g.t.ones(g.allDice), row, 1);
-                            System.out.println(g.t.ones(g.allDice));
-                            break;
-                        case 4:
-                            g.totalPoints += g.t.ones(g.allDice);
-                            table1.setValueAt(g.t.ones(g.allDice), row, 1);
-                            System.out.println(g.t.ones(g.allDice));
-                            break;
-                        case 5:
-                            g.totalPoints += g.t.ones(g.allDice);
-                            table1.setValueAt(g.t.ones(g.allDice), row, 1);
-                            System.out.println(g.t.ones(g.allDice));
-                            break;
-                        case 6:
-                            g.totalPoints += g.t.ones(g.allDice);
-                            table1.setValueAt(g.t.ones(g.allDice), row, 1);
-                            System.out.println(g.t.ones(g.allDice));
-                            break;
-                        case 8:
-                            g.totalPoints += g.t.ones(g.allDice);
-                            table1.setValueAt(g.t.ones(g.allDice), row, 1);
-                            System.out.println(g.t.ones(g.allDice));
-                            break;
-                        case 9:
-                            g.totalPoints += g.t.ones(g.allDice);
-                            table1.setValueAt(g.t.ones(g.allDice), row, 1);
-                            System.out.println(g.t.ones(g.allDice));
-                            break;
-                        case 10:
-                            g.totalPoints += g.t.ones(g.allDice);
-                            table1.setValueAt(g.t.ones(g.allDice), row, 1);
-                            System.out.println(g.t.ones(g.allDice));
-                            break;
-                        case 11:
-                            g.totalPoints += g.t.ones(g.allDice);
-                            table1.setValueAt(g.t.ones(g.allDice), row, 1);
-                            System.out.println(g.t.ones(g.allDice));
-                            break;
-                        case 12:
-                            g.totalPoints += g.t.ones(g.allDice);
-                            table1.setValueAt(g.t.ones(g.allDice), row, 1);
-                            System.out.println(g.t.ones(g.allDice));
-                            break;
-                        case 13:
-                            g.totalPoints += g.t.ones(g.allDice);
-                            table1.setValueAt(g.t.ones(g.allDice), row, 1);
-                            System.out.println(g.t.ones(g.allDice));
-                            break;
-
+                //Remove all value of other row
+                if (g.isScored[row])
+                {
+                    return;
+                }
+                for (int i=0; i<15; i++)
+                {
+                    if (i != row && i != 6 && row != 14 && !g.isScored[i])
+                    {
+                        table1.setValueAt(null, i, 1);
                     }
                 }
+                if (row >= 0) {
+                    Object cellValue = table1.getValueAt(row, 1);
+                    if (row != 6 && row != 14) {
+                        g.t.rollNum = 3;
+                        g.turnNum--;
+                        startNewRound();
+                        g.isScored[row] = true;
+                        if (row < 6) {
+                            g.upperPoint += parseInt(cellValue.toString());
+                        }
+                        else {
+                            g.lowerPoint += parseInt(cellValue.toString());
+                        }
+                    }
+                    if (g.isScored[0] && g.isScored[1] && g.isScored[2] && g.isScored[3] && g.isScored[4] && g.isScored[5]) {
+                        table1.setValueAt(g.upperPoint, 6, 1);
+                    }
+                    if (g.isScored[7] && g.isScored[8] && g.isScored[9] && g.isScored[10] && g.isScored[11] && g.isScored[12] && g.isScored[13]) {
+                        table1.setValueAt(g.lowerPoint, 14, 1);
+                    }
+                }
+                table1.setRowSelectionAllowed(false);
             }
         });
         table1.setFillsViewportHeight(true);
@@ -175,16 +137,41 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
                 dice1BoxActionPerformed(evt);
             }
         });
+        dice2Box.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dice2BoxActionPerformed(evt);
+            }
+        });
+        dice3Box.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dice3BoxActionPerformed(evt);
+            }
+        });
+        dice4Box.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dice4BoxActionPerformed(evt);
+            }
+        });
+        dice5Box.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dice5BoxActionPerformed(evt);
+            }
+        });
 
-        dice1Image.setBorder(javax.swing.BorderFactory.createBevelBorder(0));
+        dice1Box.setEnabled(false);
+        dice2Box.setEnabled(false);
+        dice3Box.setEnabled(false);
+        dice4Box.setEnabled(false);
+        dice5Box.setEnabled(false);
+        dice1Image.setBorder(javax.swing.BorderFactory.createLineBorder(Color.black));
 
-        dice2Image.setBorder(javax.swing.BorderFactory.createBevelBorder(0));
+        dice2Image.setBorder(javax.swing.BorderFactory.createLineBorder(Color.black));
 
-        dice3Image.setBorder(javax.swing.BorderFactory.createBevelBorder(0));
+        dice3Image.setBorder(javax.swing.BorderFactory.createLineBorder(Color.black));
 
-        dice4Image.setBorder(javax.swing.BorderFactory.createBevelBorder(0));
+        dice4Image.setBorder(javax.swing.BorderFactory.createLineBorder(Color.black));
 
-        dice5Image.setBorder(javax.swing.BorderFactory.createBevelBorder(0));
+        dice5Image.setBorder(javax.swing.BorderFactory.createLineBorder(Color.black));
 
         javax.swing.GroupLayout dicePanelLayout = new javax.swing.GroupLayout(dicePanel);
         dicePanel.setLayout(dicePanelLayout);
@@ -328,12 +315,45 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         pack();
     }// </editor-fold>
 
-    private void buttonActionPerformed(java.awt.event.ActionEvent evt) {
-
-    }
-
     private void dice1BoxActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        if (dice1Box.isSelected()) {
+            g.getAllDice()[0].setSaved(true);
+        }
+        else {
+            g.getAllDice()[0].setSaved(false);
+        }
+    }
+    private void dice2BoxActionPerformed(java.awt.event.ActionEvent evt) {
+        if (dice2Box.isSelected()) {
+            g.getAllDice()[1].setSaved(true);
+        }
+        else {
+            g.getAllDice()[1].setSaved(false);
+        }
+    }
+    private void dice3BoxActionPerformed(java.awt.event.ActionEvent evt) {
+        if (dice3Box.isSelected()) {
+            g.getAllDice()[2].setSaved(true);
+        }
+        else {
+            g.getAllDice()[2].setSaved(false);
+        }
+    }
+    private void dice4BoxActionPerformed(java.awt.event.ActionEvent evt) {
+        if (dice4Box.isSelected()) {
+            g.getAllDice()[3].setSaved(true);
+        }
+        else {
+            g.getAllDice()[3].setSaved(false);
+        }
+    }
+    private void dice5BoxActionPerformed(java.awt.event.ActionEvent evt) {
+        if (dice5Box.isSelected()) {
+            g.getAllDice()[4].setSaved(true);
+        }
+        else {
+            g.getAllDice()[4].setSaved(false);
+        }
     }
 
     /**
@@ -369,16 +389,146 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
     private java.awt.Label title;
 
     // End of variables declaration
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-        g.play();
+        if (g.t.rollNum > 0)
+        {
+            g.play();
+            dice1Box.setEnabled(true);
+            dice2Box.setEnabled(true);
+            dice3Box.setEnabled(true);
+            dice4Box.setEnabled(true);
+            dice5Box.setEnabled(true);
+            rollsLeftLabel.setText("Rolls Left:" + String.valueOf(g.t.rollNum));
+            setImages();
+            System.out.println(g.allDice[0].getNum() + " " + g.allDice[1].getNum() + " " + g.allDice[2].getNum() + " " + g.allDice[3].getNum() + " " + g.allDice[4].getNum());
+            for (int row=0; row<14; row++)
+            {
+                if (g.isScored[row])
+                {
+                    continue;
+                }
+                switch (row) {
+                    case 0:
+                        table1.setValueAt(g.t.ones(g.getAllDice()), row, 1);
+                        System.out.println(g.t.ones(g.allDice));
+                        break;
+                    case 1:
+                        table1.setValueAt(g.t.twos(g.getAllDice()), row, 1);
+                        System.out.println(g.t.twos(g.allDice));
+                        break;
+                    case 2:
+                        table1.setValueAt(g.t.threes(g.getAllDice()), row, 1);
+                        System.out.println(g.t.threes(g.allDice));
+                        break;
+                    case 3:
+                        table1.setValueAt(g.t.fours(g.getAllDice()), row, 1);
+                        System.out.println(g.t.fours(g.allDice));
+                        break;
+                    case 4:
+                        table1.setValueAt(g.t.fives(g.getAllDice()), row, 1);
+                        System.out.println(g.t.fives(g.allDice));
+                        break;
+                    case 5:
+                        table1.setValueAt(g.t.sixes(g.getAllDice()), row, 1);
+                        System.out.println(g.t.sixes(g.allDice));
+                        break;
+                    case 7:
+                        table1.setValueAt(g.t.threeKind(g.getAllDice()), row, 1);
+                        System.out.println(g.t.threeKind(g.allDice));
+                        break;
+                    case 8:
+                        table1.setValueAt(g.t.fourKind(g.getAllDice()), row, 1);
+                        System.out.println(g.t.fourKind(g.allDice));
+                        break;
+                    case 9:
+                        table1.setValueAt(g.t.fullHouse(g.allDice), row, 1);
+                        System.out.println(g.t.fullHouse(g.allDice));
+                        break;
+                    case 10:
+                        table1.setValueAt(g.t.straightSmall(g.allDice), row, 1);
+                        System.out.println(g.t.straightSmall(g.allDice));
+                        break;
+                    case 11:
+                        table1.setValueAt(g.t.straightLarge(g.allDice), row, 1);
+                        System.out.println(g.t.straightLarge(g.allDice));
+                        break;
+                    case 12:
+                        table1.setValueAt(g.t.chance(g.allDice), row, 1);
+                        System.out.println(g.t.chance(g.allDice));
+                        break;
+                    case 13:
+                        table1.setValueAt(g.t.yahtzee(g.allDice), row, 1);
+                        System.out.println(g.t.yahtzee(g.allDice));
+                        break;
+
+                }
+            }
+
+        }
+        // else choose from score board and then end turn
+    }
+
+    public void setImages() {
+        ArrayList<JLabel> diceImages = new ArrayList<JLabel>();
+        diceImages.add(dice1Image);
+        diceImages.add(dice2Image);
+        diceImages.add(dice3Image);
+        diceImages.add(dice4Image);
+        diceImages.add(dice5Image);
+        Dice[] dices = g.getAllDice();
+        for (int i=0; i<5; i++)
+        {
+            if (!dices[i].isSaved()) {
+                int diceNum = randomDice();
+                String iconSource = "/img/dice" + diceNum + ".png";
+                diceImages.get(i).setIcon(new ImageIcon(getClass().getResource(iconSource)));
+                g.setDice(i, diceNum);
+            }
+        }
+
+    }
+
+    public void startNewRound() {
+        dice1Box.setEnabled(false);
+        dice2Box.setEnabled(false);
+        dice3Box.setEnabled(false);
+        dice4Box.setEnabled(false);
+        dice5Box.setEnabled(false);
+
+        dice1Box.setSelected(false);
+        dice2Box.setSelected(false);
+        dice3Box.setSelected(false);
+        dice4Box.setSelected(false);
+        dice5Box.setSelected(false);
+
+        g.clearDice();
+
+        ArrayList<JLabel> diceImages = new ArrayList<JLabel>();
+        diceImages.add(dice1Image);
+        diceImages.add(dice2Image);
+        diceImages.add(dice3Image);
+        diceImages.add(dice4Image);
+        diceImages.add(dice5Image);
+        for (int i=0; i<5; i++)
+        {
+            diceImages.get(i).setIcon(new ImageIcon());
+        }
+
+        roundLabel.setText("Rounds Left:" + String.valueOf(g.turnNum));
+
         rollsLeftLabel.setText("Rolls Left:" + String.valueOf(g.t.rollNum));
-        dice1Image.setIcon(null);
+
+
+    }
+
+    public int randomDice(){
+        Random random = new Random();
+        return 1 + random.nextInt(6);
     }
 
     public void scoreActionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
         g.play();
         button.setText("Bababooey");
         roundLabel.setText("Rounds Left:" + String.valueOf(g.turnNum));
