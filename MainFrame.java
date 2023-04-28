@@ -31,6 +31,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         table1 = new javax.swing.JTable();
         title = new java.awt.Label();
         gamePanel = new javax.swing.JPanel();
+        endGamePanel = new javax.swing.JPanel();
         roundLabel = new javax.swing.JLabel();
         dicePanel = new javax.swing.JPanel();
         dice1Box = new javax.swing.JCheckBox();
@@ -45,14 +46,13 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         dice5Image = new javax.swing.JLabel();
         button = new javax.swing.JButton();
         rollsLeftLabel = new javax.swing.JLabel();
+        totalScoreLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createBevelBorder(0));
         jScrollPane1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        for (int i = 0; i < table1.getRowCount(); i++) {
 
-        }
         table1.setFont(new java.awt.Font("Eras Medium ITC", 0, 12)); // NOI18N
         table1.setModel(new MyTableModel(
                 new Object[][] {
@@ -106,11 +106,75 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
                             g.lowerPoint += parseInt(cellValue.toString());
                         }
                     }
-                    if (g.isScored[0] && g.isScored[1] && g.isScored[2] && g.isScored[3] && g.isScored[4] && g.isScored[5]) {
+                    if (g.isScored[0] && g.isScored[1] && g.isScored[2] && g.isScored[3] && g.isScored[4] && g.isScored[5] && !g.isScored[6]) {
                         table1.setValueAt(g.upperPoint, 6, 1);
+                        g.totalPoints += g.upperPoint;
+                        g.isScored[6] = true;
                     }
-                    if (g.isScored[7] && g.isScored[8] && g.isScored[9] && g.isScored[10] && g.isScored[11] && g.isScored[12] && g.isScored[13]) {
+                    if (g.isScored[7] && g.isScored[8] && g.isScored[9] && g.isScored[10] && g.isScored[11] && g.isScored[12] && g.isScored[13] && !g.isScored[14]) {
                         table1.setValueAt(g.lowerPoint, 14, 1);
+                        g.totalPoints += g.lowerPoint;
+                        g.isScored[14] = true;
+                    }
+                    if(g.turnNum == 0) {
+                        gamePanel.hide();
+                        button.setFont(new java.awt.Font("Eras Medium ITC", 0, 24)); // NOI18N
+                        button.setText("New Game?");
+                        button.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+                        button.addActionListener(new java.awt.event.ActionListener() {
+                            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                buttonActionPerformed(evt);
+                            }
+                        });
+
+                        totalScoreLabel.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
+                        totalScoreLabel.setText("Total Score: " + String.valueOf(g.totalPoints));
+
+                        javax.swing.GroupLayout endGamePanelLayout = new javax.swing.GroupLayout(endGamePanel);
+                        endGamePanel.setLayout(endGamePanelLayout);
+                        endGamePanelLayout.setHorizontalGroup(
+                                endGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, endGamePanelLayout.createSequentialGroup()
+                                                .addContainerGap(45, Short.MAX_VALUE)
+                                                .addGroup(endGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addComponent(totalScoreLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(button, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(114, 114, 114))
+                        );
+                        endGamePanelLayout.setVerticalGroup(
+                                endGamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(endGamePanelLayout.createSequentialGroup()
+                                                .addGap(91, 91, 91)
+                                                .addComponent(totalScoreLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                                                .addComponent(button, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(33, 33, 33))
+                        );
+
+                        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+                        getContentPane().setLayout(layout);
+                        layout.setHorizontalGroup(
+                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(154, 154, 154)
+                                                .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 209, Short.MAX_VALUE))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(endGamePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        );
+                        layout.setVerticalGroup(
+                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(endGamePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addContainerGap(25, Short.MAX_VALUE))
+                                                        .addComponent(jScrollPane1)))
+                        );
                     }
                 }
                 table1.setRowSelectionAllowed(false);
@@ -128,6 +192,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         title.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         title.setFont(new java.awt.Font("Eras Medium ITC", 1, 48)); // NOI18N
         title.setText("Yahtzee");
+
 
         roundLabel.setFont(new java.awt.Font("Eras Medium ITC", 0, 18)); // NOI18N
         roundLabel.setText("Rounds Left:" + String.valueOf(g.turnNum));
@@ -242,11 +307,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         button.setFont(new java.awt.Font("Eras Medium ITC", 0, 36)); // NOI18N
         button.setText("Roll");
         button.setBorder(javax.swing.BorderFactory.createBevelBorder(0));
-        // button.addActionListener(new java.awt.event.ActionListener() {
-        // public void actionPerformed(java.awt.event.ActionEvent evt) {
-        // buttonActionPerformed(evt);
-        // }
-        // });
+
         button.addActionListener(evt -> actionPerformed(evt));
 
         rollsLeftLabel.setFont(new java.awt.Font("Eras Medium ITC", 0, 18)); // NOI18N
@@ -315,6 +376,12 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         pack();
     }// </editor-fold>
 
+    //New game Button
+    private void buttonActionPerformed(ActionEvent evt) {
+        this.dispose();
+        new MainFrame().setVisible(true);
+    }
+
     private void dice1BoxActionPerformed(java.awt.event.ActionEvent evt) {
         if (dice1Box.isSelected()) {
             g.getAllDice()[0].setSaved(true);
@@ -382,11 +449,13 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JLabel dice5Image;
     private javax.swing.JPanel dicePanel;
     private javax.swing.JPanel gamePanel;
+    private javax.swing.JPanel endGamePanel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel rollsLeftLabel;
     private javax.swing.JLabel roundLabel;
     private javax.swing.JTable table1;
     private java.awt.Label title;
+    private javax.swing.JLabel totalScoreLabel;
 
     // End of variables declaration
 
