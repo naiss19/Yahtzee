@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
 import javax.swing.table.*;
+
 import static java.lang.Integer.parseInt;
 
 public class GameData {
@@ -29,12 +30,12 @@ public class GameData {
     public javax.swing.JLabel totalScoreLabel;
 
     public GameData() {
-         jScrollPane1 = new javax.swing.JScrollPane();
-         table1 = new javax.swing.JTable();
-         title = new java.awt.Label();
-         gamePanel = new javax.swing.JPanel();
-         endGamePanel = new javax.swing.JPanel();
-         roundLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table1 = new javax.swing.JTable();
+        title = new java.awt.Label();
+        gamePanel = new javax.swing.JPanel();
+        endGamePanel = new javax.swing.JPanel();
+        roundLabel = new javax.swing.JLabel();
         dicePanel = new javax.swing.JPanel();
         dice1Box = new javax.swing.JCheckBox();
         dice2Box = new javax.swing.JCheckBox();

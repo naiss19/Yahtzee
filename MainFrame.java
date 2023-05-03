@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
 import javax.swing.table.*;
+
 import static java.lang.Integer.parseInt;
 
 /**
  * Yahtzee Final Project
- * 
  */
 public class MainFrame extends javax.swing.JFrame implements ActionListener {
     Game g;
     GameData gd;
     SetScore s;
+
     /**
      * Creates new form MainFrame
      */
@@ -37,68 +38,104 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
 
         gd.table1.setFont(new java.awt.Font("Eras Medium ITC", 0, 12)); // NOI18N
         gd.table1.setModel(new MyTableModel(
-                new Object[][] {
-                        { "Ones", "" },
-                        { "Twos", null },
-                        { "Threes", null },
-                        { "Fours", null },
-                        { "Fives", null },
-                        { "Sixes", null },
-                        { "Upper Total", null },
-                        { "3 of a Kind", null },
-                        { "4 of a Kind", null },
-                        { "Full House", null },
-                        { "Small Straight", null },
-                        { "Large Straight", null },
-                        { "Chance", null },
-                        { "Yahtzee", null },
-                        { "Lower Total", null }
+                new Object[][]{
+                        {"Ones", null},
+                        {"Twos", null},
+                        {"Threes", null},
+                        {"Fours", null},
+                        {"Fives", null},
+                        {"Sixes", null},
+                        {"Upper Total", null},
+                        {"Bonus", null},
+                        {"3 of a Kind", null},
+                        {"4 of a Kind", null},
+                        {"Full House", null},
+                        {"Small Straight", null},
+                        {"Large Straight", null},
+                        {"Chance", null},
+                        {"Yahtzee", null},
+                        {"Yahtzee Bonus", null},
+                        {"Lower Total", null}
                 },
-                new String[] {
+                new String[]{
                         "Category", "Score"
                 }));
 
         gd.table1.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-
                 int row = gd.table1.rowAtPoint(e.getPoint());
+                Object cellValue = gd.table1.getValueAt(row, 1);
+                boolean isYahtzee = g.t.yahtzee(g.allDice) == 50;
+                Object yahtzeeCell = gd.table1.getValueAt(14, 1);
+
                 //Remove all value of other row
-                if (g.isScored[row])
-                {
-                    return;
-                }
-                for (int i=0; i<15; i++)
-                {
-                    if (i != row && i != 6 && row != 14 && !g.isScored[i])
-                    {
-                        gd.table1.setValueAt(null, i, 1);
+                if (cellValue != null) {
+                    if (g.isScored[row]) {
+                        return;
                     }
-                }
-                if (row >= 0) {
-                    Object cellValue = gd.table1.getValueAt(row, 1);
-                    if (row != 6 && row != 14) {
+                    for (int i = 0; i < 17; i++) {
+                        if (i != row && row != 6 && row != 7 && row != 15 && row != 16 && !g.isScored[i]) {
+                            gd.table1.setValueAt(null, i, 1);
+                        }
+                    }
+                    //If the row being clicked on isn't the upper, bonus, lower, and yahtzee bonus cell
+                    if (row != 6 && row != 7 && row != 15 && row != 16) {
+                        //If the Yahtzee cell is filled and the dices are Yahtzee
+                        if (g.isScored[14] && isYahtzee) {
+                            //If the Yahtzee cell isn't zero then add 100 bonus points per other cell scored, otherwise no bonus
+                            if (parseInt(yahtzeeCell.toString()) != 0) {
+                                if (gd.table1.getValueAt(15, 1) == null) {
+                                    gd.table1.setValueAt(100, 15, 1);
+                                } else {
+                                    gd.table1.setValueAt(parseInt(gd.table1.getValueAt(15, 1).toString()) + 100, 15, 1);
+                                }
+                            } else {
+                                gd.table1.setValueAt(0, 15, 1);
+                            }
+                            g.isScored[15] = true;
+                        }
+                        //Setting up the next round
                         g.t.rollNum = 3;
                         g.turnNum--;
                         s.startNewRound(gd, g);
                         g.isScored[row] = true;
                         if (row < 6) {
                             g.upperPoint += parseInt(cellValue.toString());
-                        }
-                        else {
+                        } else {
                             g.lowerPoint += parseInt(cellValue.toString());
                         }
                     }
-                    if (g.isScored[0] && g.isScored[1] && g.isScored[2] && g.isScored[3] && g.isScored[4] && g.isScored[5] && !g.isScored[6]) {
+                    //Checks if all the upper section cells are filled
+                    if (g.isScored[0] && g.isScored[1] && g.isScored[2] && g.isScored[3] && g.isScored[4] && g.isScored[5] && !g.isScored[6] && !g.isScored[7]) {
+                        //Adds up upper section points into the total
                         gd.table1.setValueAt(g.upperPoint, 6, 1);
                         g.totalPoints += g.upperPoint;
+
+                        //If the upper section is more than 63, adds a bonus of 35 points, otherwise no bonus
+                        if (g.upperPoint > 63) {
+                            gd.table1.setValueAt(35, 7, 1);
+                            g.totalPoints += 35;
+                        } else {
+                            gd.table1.setValueAt(0, 7, 1);
+                        }
+                        g.isScored[7] = true;
                         g.isScored[6] = true;
                     }
-                    if (g.isScored[7] && g.isScored[8] && g.isScored[9] && g.isScored[10] && g.isScored[11] && g.isScored[12] && g.isScored[13] && !g.isScored[14]) {
-                        gd.table1.setValueAt(g.lowerPoint, 14, 1);
+                    //Checks if all the lower section cells are filled
+                    if (g.isScored[8] && g.isScored[9] && g.isScored[10] && g.isScored[11] && g.isScored[12] && g.isScored[13] && g.isScored[14] && !g.isScored[16]) {
+                        //Checks if user the user selects Yahtzee cell last
+                        if (!g.isScored[15]) {
+                            g.isScored[15] = true;
+                            gd.table1.setValueAt(0, 15, 1);
+                        }
+                        //
+                        g.lowerPoint += parseInt(gd.table1.getValueAt(15, 1).toString());
+                        gd.table1.setValueAt(g.lowerPoint, 16, 1);
                         g.totalPoints += g.lowerPoint;
-                        g.isScored[14] = true;
+                        g.isScored[16] = true;
                     }
-                    if(g.turnNum == 0) {
+                    //Checks if the game ends
+                    if (g.turnNum == 0) {
                         gd.gamePanel.hide();
                         gd.button.setFont(new java.awt.Font("Eras Medium ITC", 0, 24)); // NOI18N
                         gd.button.setText("New Game?");
@@ -110,7 +147,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
                         });
 
                         gd.totalScoreLabel.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
-                        gd.totalScoreLabel.setText("Total Score: " + String.valueOf(g.totalPoints));
+                        gd.totalScoreLabel.setText("Total Score: " + g.totalPoints);
 
                         javax.swing.GroupLayout endGamePanelLayout = new javax.swing.GroupLayout(gd.endGamePanel);
                         gd.endGamePanel.setLayout(endGamePanelLayout);
@@ -158,8 +195,8 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
                                                         .addComponent(gd.jScrollPane1)))
                         );
                     }
+                    gd.table1.setRowSelectionAllowed(false);
                 }
-                gd.table1.setRowSelectionAllowed(false);
             }
         });
         gd.table1.setFillsViewportHeight(true);
@@ -177,53 +214,53 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
 
 
         gd.roundLabel.setFont(new java.awt.Font("Eras Medium ITC", 0, 18)); // NOI18N
-        gd.roundLabel.setText("Rounds Left:" + String.valueOf(g.turnNum));
+        gd.roundLabel.setText("Rounds Left:" + g.turnNum);
 
-       gd.dice1Box.addActionListener(new java.awt.event.ActionListener() {
+        gd.dice1Box.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-               dice1BoxActionPerformed(evt);
+                dice1BoxActionPerformed(evt);
             }
         });
-       gd.dice2Box.addActionListener(new java.awt.event.ActionListener() {
+        gd.dice2Box.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-               dice2BoxActionPerformed(evt);
+                dice2BoxActionPerformed(evt);
             }
         });
-       gd.dice3Box.addActionListener(new java.awt.event.ActionListener() {
+        gd.dice3Box.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-               dice3BoxActionPerformed(evt);
+                dice3BoxActionPerformed(evt);
             }
         });
-       gd.dice4Box.addActionListener(new java.awt.event.ActionListener() {
+        gd.dice4Box.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-               dice4BoxActionPerformed(evt);
+                dice4BoxActionPerformed(evt);
             }
         });
-       gd.dice5Box.addActionListener(new java.awt.event.ActionListener() {
+        gd.dice5Box.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-               dice5BoxActionPerformed(evt);
+                dice5BoxActionPerformed(evt);
             }
         });
 
-       gd.dice1Box.setEnabled(false);
-       gd.dice2Box.setEnabled(false);
-       gd.dice3Box.setEnabled(false);
-       gd.dice4Box.setEnabled(false);
-       gd.dice5Box.setEnabled(false);
-       gd.dice1Image.setBorder(javax.swing.BorderFactory.createLineBorder(Color.black));
+        gd.dice1Box.setEnabled(false);
+        gd.dice2Box.setEnabled(false);
+        gd.dice3Box.setEnabled(false);
+        gd.dice4Box.setEnabled(false);
+        gd.dice5Box.setEnabled(false);
+        gd.dice1Image.setBorder(javax.swing.BorderFactory.createLineBorder(Color.black));
 
-       gd.dice2Image.setBorder(javax.swing.BorderFactory.createLineBorder(Color.black));
+        gd.dice2Image.setBorder(javax.swing.BorderFactory.createLineBorder(Color.black));
 
-       gd.dice3Image.setBorder(javax.swing.BorderFactory.createLineBorder(Color.black));
+        gd.dice3Image.setBorder(javax.swing.BorderFactory.createLineBorder(Color.black));
 
-       gd.dice4Image.setBorder(javax.swing.BorderFactory.createLineBorder(Color.black));
+        gd.dice4Image.setBorder(javax.swing.BorderFactory.createLineBorder(Color.black));
 
-       gd.dice5Image.setBorder(javax.swing.BorderFactory.createLineBorder(Color.black));
+        gd.dice5Image.setBorder(javax.swing.BorderFactory.createLineBorder(Color.black));
 
         javax.swing.GroupLayout dicePanelLayout = new javax.swing.GroupLayout(gd.dicePanel);
-       gd.dicePanel.setLayout(dicePanelLayout);
-       dicePanelLayout.setHorizontalGroup(
-               dicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        gd.dicePanel.setLayout(dicePanelLayout);
+        dicePanelLayout.setHorizontalGroup(
+                dicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dicePanelLayout.createSequentialGroup()
                                 .addGroup(dicePanelLayout
                                         .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -263,8 +300,8 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
                                                         javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(gd.dice5Box)
                                                 .addGap(36, 36, 36)))));
-       dicePanelLayout.setVerticalGroup(
-               dicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        dicePanelLayout.setVerticalGroup(
+                dicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dicePanelLayout.createSequentialGroup()
                                 .addGap(107, 107, 107)
                                 .addGroup(dicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
@@ -293,7 +330,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         gd.button.addActionListener(evt -> actionPerformed(evt));
 
         gd.rollsLeftLabel.setFont(new java.awt.Font("Eras Medium ITC", 0, 18)); // NOI18N
-        gd.rollsLeftLabel.setText("Rolls Left:" + String.valueOf(g.t.rollNum));
+        gd.rollsLeftLabel.setText("Rolls Left:" + g.t.rollNum);
 
         javax.swing.GroupLayout gamePanelLayout = new javax.swing.GroupLayout(gd.gamePanel);
         gd.gamePanel.setLayout(gamePanelLayout);
@@ -356,6 +393,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
                                         .addComponent(gd.jScrollPane1))));
 
         pack();
+        setBounds(0, 0, 645, 635);
     }// </editor-fold>
 
     //New game gd.button
@@ -365,50 +403,29 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
     }
 
     private void dice1BoxActionPerformed(java.awt.event.ActionEvent evt) {
-        if (gd.dice1Box.isSelected()) {
-            g.getAllDice()[0].setSaved(true);
-        }
-        else {
-            g.getAllDice()[0].setSaved(false);
-        }
+        g.getAllDice()[0].setSaved(gd.dice1Box.isSelected());
     }
+
     private void dice2BoxActionPerformed(java.awt.event.ActionEvent evt) {
-        if (gd.dice2Box.isSelected()) {
-            g.getAllDice()[1].setSaved(true);
-        }
-        else {
-            g.getAllDice()[1].setSaved(false);
-        }
+        g.getAllDice()[1].setSaved(gd.dice2Box.isSelected());
     }
+
     private void dice3BoxActionPerformed(java.awt.event.ActionEvent evt) {
-        if (gd.dice3Box.isSelected()) {
-            g.getAllDice()[2].setSaved(true);
-        }
-        else {
-            g.getAllDice()[2].setSaved(false);
-        }
+        g.getAllDice()[2].setSaved(gd.dice3Box.isSelected());
     }
+
     private void dice4BoxActionPerformed(java.awt.event.ActionEvent evt) {
-        if (gd.dice4Box.isSelected()) {
-            g.getAllDice()[3].setSaved(true);
-        }
-        else {
-            g.getAllDice()[3].setSaved(false);
-        }
+        g.getAllDice()[3].setSaved(gd.dice4Box.isSelected());
     }
+
     private void dice5BoxActionPerformed(java.awt.event.ActionEvent evt) {
-        if (gd.dice5Box.isSelected()) {
-            g.getAllDice()[4].setSaved(true);
-        }
-        else {
-            g.getAllDice()[4].setSaved(false);
-        }
+        g.getAllDice()[4].setSaved(gd.dice5Box.isSelected());
     }
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -417,24 +434,10 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         });
     }
 
-    // Variables declaration - do not modify
-
-
-    // End of variables declaration
-
     @Override
     public void actionPerformed(ActionEvent e) {
         SetScore s = new SetScore();
         s.scoreTable(gd, g);
-        // else choose from score board and then end turn
-    }
-
-
-    public void scoreActionPerformed(ActionEvent e) {
-        g.play();
-        gd.button.setText("Bababooey");
-        gd.roundLabel.setText("Rounds Left:" + String.valueOf(g.turnNum));
-
     }
 }
 
