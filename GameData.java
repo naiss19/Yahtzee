@@ -1,12 +1,3 @@
-import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.Random;
-import javax.swing.*;
-import javax.swing.table.*;
-
-import static java.lang.Integer.parseInt;
-
 public class GameData {
     public javax.swing.JButton button;
     public javax.swing.JCheckBox dice1Box;
