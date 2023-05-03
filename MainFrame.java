@@ -111,7 +111,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
                         gd.table1.setValueAt(g.upperPoint, 6, 1);
                         g.totalPoints += g.upperPoint;
 
-                        //If the upper section is more than 63, adds a bonus of 35 points, otherwise no bonus
+                        //If the upper section is more than 63, adds a bonus of 35 points to total, otherwise no bonus
                         if (g.upperPoint > 63) {
                             gd.table1.setValueAt(35, 7, 1);
                             g.totalPoints += 35;
@@ -128,7 +128,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
                             g.isScored[15] = true;
                             gd.table1.setValueAt(0, 15, 1);
                         }
-                        //
+                        //Adds up lower section points into the total
                         g.lowerPoint += parseInt(gd.table1.getValueAt(15, 1).toString());
                         gd.table1.setValueAt(g.lowerPoint, 16, 1);
                         g.totalPoints += g.lowerPoint;
