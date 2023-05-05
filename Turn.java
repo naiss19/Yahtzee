@@ -137,18 +137,17 @@ public class Turn {
     }
 
     public int straightSmall(Dice[] dice) {
-        int[] count = new int[7];  
-        for (int i = 0; i < dice.length; i++) {
-            count[dice[i].getNum()]++;
+        if(checkDiceSimple(dice, 1) > 0 && checkDiceSimple(dice, 2) > 0 && checkDiceSimple(dice, 3) > 0 
+        && checkDiceSimple(dice, 4)> 0) {
+            return 30;
+        } else if(checkDiceSimple(dice, 2) > 0&& checkDiceSimple(dice, 3) > 0 
+        && checkDiceSimple(dice, 4) > 0 && checkDiceSimple(dice, 5) > 0) {
+            return 30;
+        } else if(checkDiceSimple(dice, 6) > 0 && checkDiceSimple(dice, 3) > 0 
+        && checkDiceSimple(dice, 4) > 0 && checkDiceSimple(dice, 5)> 0) {
+            return 30;
         }
-       
-        for (int i = 1; i <= 3; i++) {
-            if (count[i] > 0 && count[i+1] > 0 && count[i+2] > 0 && count[i+3] > 0) {
-                return 30;
-            }
-        }
-        return 0;  
-    
+        return 0;
     }
 
     public int straightLarge(Dice[] dice) {
