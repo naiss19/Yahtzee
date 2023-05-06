@@ -137,14 +137,14 @@ public class Turn {
     }
 
     public int straightSmall(Dice[] dice) {
-        if (checkDiceSimple(dice, 1) == 1 && checkDiceSimple(dice, 2) == 2 && checkDiceSimple(dice, 3) == 3
-                && checkDiceSimple(dice, 4) == 4) {
+        if(checkDiceSimple(dice, 1) > 0 && checkDiceSimple(dice, 2) > 0 && checkDiceSimple(dice, 3) > 0 
+        && checkDiceSimple(dice, 4)> 0) {
             return 30;
-        } else if (checkDiceSimple(dice, 2) == 2 && checkDiceSimple(dice, 3) == 3
-                && checkDiceSimple(dice, 4) == 4 && checkDiceSimple(dice, 5) == 5) {
+        } else if(checkDiceSimple(dice, 2) > 0&& checkDiceSimple(dice, 3) > 0 
+        && checkDiceSimple(dice, 4) > 0 && checkDiceSimple(dice, 5) > 0) {
             return 30;
-        } else if (checkDiceSimple(dice, 6) == 6 && checkDiceSimple(dice, 3) == 3
-                && checkDiceSimple(dice, 4) == 4 && checkDiceSimple(dice, 5) == 5) {
+        } else if(checkDiceSimple(dice, 6) > 0 && checkDiceSimple(dice, 3) > 0 
+        && checkDiceSimple(dice, 4) > 0 && checkDiceSimple(dice, 5)> 0) {
             return 30;
         }
         return 0;
