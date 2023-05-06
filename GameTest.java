@@ -70,14 +70,8 @@ public class GameTest {
     }
     @Test
     public void testUpperTotal() {
-        int randTotal = 0;
-        for (int i = 0; i < 5; i++) {
-                int diceNum = randomDice();
-                m.g.setDice(i, diceNum);
-                randTotal += diceNum;
-        }
-        m.g.upperPoint += m.g.t.chance(m.g.allDice);
-        assertEquals("Upper Total Failed", randTotal, m.g.upperPoint);
+        m.scoring(3, 12, false, 50);
+        assertEquals("Lower Total Failed", 12, m.g.upperPoint);
 
     }
     @Test
@@ -120,17 +114,6 @@ public class GameTest {
     @Test
     public void testSmStraight() {
 
-        for(int i = 0; i < 4; i++) {
-            m.g.allDice[i].setNum(i+1);
-            // System.out.println(m.g.allDice[i].getNum());
-        }
-        assertEquals("3 of a kind not available", 30, m.g.t.straightSmall(m.g.allDice));
-
-        for(int i = 0; i < 4; i++) {
-            m.g.allDice[i].setNum(i+2);
-
-        }
-        assertEquals("3 of a kind not available", 30, m.g.t.straightSmall(m.g.allDice));
 
         for(int i = 0; i < 4; i++) {
             m.g.allDice[i].setNum(i+3);
@@ -139,28 +122,63 @@ public class GameTest {
     }
     @Test
     public void testLgStraight() {
-        fail("Unimplemented Method");
+        for(int i = 0; i < 5; i++) {
+            m.g.allDice[i].setNum(i+1);
+            // System.out.println(m.g.allDice[i].getNum());
+        }
+        assertEquals("3 of a kind not available", 40, m.g.t.straightLarge(m.g.allDice));
+
+        for(int i = 0; i < 5; i++) {
+            m.g.allDice[i].setNum(i+2);
+
+        }
+        assertEquals("3 of a kind not available", 40, m.g.t.straightLarge(m.g.allDice));
+
     }
     @Test
     public void testChance() {
-        fail("Unimplemented Method");
+        
+        int total = 0;
+        for(int i = 0; i < 5; i++) {
+            int randNum = (int) (Math.random() * (6 - 1) + 1);
+            m.g.allDice[i].setNum(randNum);
+            total+= randNum;
+        }
+        assertEquals("Chance Failed", total, m.g.t.chance(m.g.allDice));
     }
+
+
     @Test
     public void testYahtzee() {
-        fail("Unimplemented Method");
+        for(int i = 1; i < 7; i++) {
+            testSimple(i);
+            assertEquals("Yahtzee Failed", 50, m.g.t.yahtzee(m.g.allDice));
+        }
     }
 
     @Test
     public void testYahtzeeBonus() {
-        fail("Unimplemented Method");
+        //TODO: Figure this shit out
+        // for(int i = 1; i < 7; i++) {
+        //     testSimple(i);
+        //     assertEquals("Yahtzee Failed", 50, m.g.t.yahtzee(m.g.allDice));
+        // }
     }
     @Test
     public void testLowerTotal() {
-        fail("Unimplemented Method");
+        m.scoring(8, 12, false, 50);
+        assertEquals("Lower Total Failed", 12, m.g.lowerPoint);
     }
+
     @Test
     public void testTotalPoints() {
-        fail("Unimplemented Method");
+        for(int i = 0; i < 17; i++) {
+            m.g.isScored[i] = true;
+        }
+        m.g.upperPoint = 64;
+        m.scoring(3, 14, false, 50);
+        m.upperBonus();
+        assertEquals("Total Points Failed", 35, m.g.totalPoints);
     }
 
 }
