@@ -28,48 +28,17 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Gui Code">
-    private void initComponents() {
+public void upperBonus() {
+        if (g.upperPoint > 63) {
+                gd.table1.setValueAt(35, 7, 1);
+                g.totalPoints += 35;
+            } else {
+                gd.table1.setValueAt(0, 7, 1);
+            }
+}
 
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        gd.jScrollPane1.setBorder(javax.swing.BorderFactory.createBevelBorder(0));
-        gd.jScrollPane1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-
-        gd.table1.setFont(new java.awt.Font("Eras Medium ITC", 0, 12)); // NOI18N
-        gd.table1.setModel(new MyTableModel(
-                new Object[][]{
-                        {"Ones", null},
-                        {"Twos", null},
-                        {"Threes", null},
-                        {"Fours", null},
-                        {"Fives", null},
-                        {"Sixes", null},
-                        {"Upper Total", null},
-                        {"Bonus", null},
-                        {"3 of a Kind", null},
-                        {"4 of a Kind", null},
-                        {"Full House", null},
-                        {"Small Straight", null},
-                        {"Large Straight", null},
-                        {"Chance", null},
-                        {"Yahtzee", null},
-                        {"Yahtzee Bonus", null},
-                        {"Lower Total", null}
-                },
-                new String[]{
-                        "Category", "Score"
-                }));
-
-        gd.table1.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                int row = gd.table1.rowAtPoint(e.getPoint());
-                Object cellValue = gd.table1.getValueAt(row, 1);
-                boolean isYahtzee = g.t.yahtzee(g.allDice) == 50;
-                Object yahtzeeCell = gd.table1.getValueAt(14, 1);
-
-                //Remove all value of other row
-                if (cellValue != null) {
+public void scoring(int row, Object cellValue, boolean isYahtzee, Object yahtzeeCell) {
+        if (cellValue != null) {
                     if (g.isScored[row]) {
                         return;
                     }
@@ -112,12 +81,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
                         g.totalPoints += g.upperPoint;
 
                         //If the upper section is more than 63, adds a bonus of 35 points to total, otherwise no bonus
-                        if (g.upperPoint > 63) {
-                            gd.table1.setValueAt(35, 7, 1);
-                            g.totalPoints += 35;
-                        } else {
-                            gd.table1.setValueAt(0, 7, 1);
-                        }
+                        upperBonus();
                         g.isScored[7] = true;
                         g.isScored[6] = true;
                     }
@@ -197,6 +161,51 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
                     }
                     gd.table1.setRowSelectionAllowed(false);
                 }
+}
+
+
+    private void initComponents() {
+
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        gd.jScrollPane1.setBorder(javax.swing.BorderFactory.createBevelBorder(0));
+        gd.jScrollPane1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+
+        gd.table1.setFont(new java.awt.Font("Eras Medium ITC", 0, 12)); // NOI18N
+        gd.table1.setModel(new MyTableModel(
+                new Object[][]{
+                        {"Ones", null},
+                        {"Twos", null},
+                        {"Threes", null},
+                        {"Fours", null},
+                        {"Fives", null},
+                        {"Sixes", null},
+                        {"Upper Total", null},
+                        {"Bonus", null},
+                        {"3 of a Kind", null},
+                        {"4 of a Kind", null},
+                        {"Full House", null},
+                        {"Small Straight", null},
+                        {"Large Straight", null},
+                        {"Chance", null},
+                        {"Yahtzee", null},
+                        {"Yahtzee Bonus", null},
+                        {"Lower Total", null}
+                },
+                new String[]{
+                        "Category", "Score"
+                }));
+
+        gd.table1.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                int row = gd.table1.rowAtPoint(e.getPoint());
+                Object cellValue = gd.table1.getValueAt(row, 1);
+                boolean isYahtzee = g.t.yahtzee(g.allDice) == 50;
+                Object yahtzeeCell = gd.table1.getValueAt(14, 1);
+
+                //Remove all value of other row
+                scoring(row, cellValue, isYahtzee, yahtzeeCell);
             }
         });
         gd.table1.setFillsViewportHeight(true);
