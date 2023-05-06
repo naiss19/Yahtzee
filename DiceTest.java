@@ -15,7 +15,10 @@ class DiceTest {
 	    public void setUp() {
 	    	m = new MainFrame();
 	    }
-
+	    @After
+	    public void end() {
+	        m = null;
+	    }
 	    @Test
 	    public void testGetNum() {
 	    	m.g.allDice[1].setNum(2);
