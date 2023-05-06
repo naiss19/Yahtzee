@@ -39,9 +39,7 @@ public class GameTest {
     @Test
     public void testOnes() {
         testSimple(1);
-        assertEquals("One's failed", m.g.t.ones(m.g.allDice), 5);
-
-        
+        assertEquals("One's failed", 5, m.g.t.ones(m.g.allDice));
     }
 
     @Test
@@ -91,16 +89,53 @@ public class GameTest {
     }
     @Test
     public void test3ofKind() {
-        fail("Unimplemented Method");
+        int randNum = (int) (Math.random() * (6 - 1) + 1);
+        int total = 0;
+        for(int i = 0; i < 3; i++) {
+            m.g.allDice[i].setNum(randNum);
+            total+= randNum;
+        }
+        total+=m.g.allDice[3].getNum();
+        total+=m.g.allDice[4].getNum();
+
+        assertEquals("3 of a kind not available", total, m.g.t.threeKind(m.g.allDice));
+        
     }
     @Test
     public void test4ofKind() {
-        fail("Unimplemented Method");
+
+        int randNum = (int) (Math.random() * (6 - 1) + 1);
+        int total = 0;
+        for(int i = 0; i < 4; i++) {
+            m.g.allDice[i].setNum(randNum);
+            total+= randNum;
+        }
+
+        total+=m.g.allDice[4].getNum();
+
+        assertEquals("3 of a kind not available", total, m.g.t.fourKind(m.g.allDice));
+        
     }
 
     @Test
     public void testSmStraight() {
-        fail("Unimplemented Method");
+
+        for(int i = 0; i < 4; i++) {
+            m.g.allDice[i].setNum(i+1);
+            // System.out.println(m.g.allDice[i].getNum());
+        }
+        assertEquals("3 of a kind not available", 30, m.g.t.straightSmall(m.g.allDice));
+
+        for(int i = 0; i < 4; i++) {
+            m.g.allDice[i].setNum(i+2);
+
+        }
+        assertEquals("3 of a kind not available", 30, m.g.t.straightSmall(m.g.allDice));
+
+        for(int i = 0; i < 4; i++) {
+            m.g.allDice[i].setNum(i+3);
+        }
+        assertEquals("3 of a kind not available", 30, m.g.t.straightSmall(m.g.allDice));
     }
     @Test
     public void testLgStraight() {

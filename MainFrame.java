@@ -37,7 +37,7 @@ public void upperBonus() {
             }
 }
 
-private void scoring(int row, Object cellValue, boolean isYahtzee, Object yahtzeeCell) {
+public void scoring(int row, Object cellValue, boolean isYahtzee, Object yahtzeeCell) {
         if (cellValue != null) {
                     if (g.isScored[row]) {
                         return;
