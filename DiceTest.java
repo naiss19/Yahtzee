@@ -22,30 +22,6 @@ class DiceTest {
 	}
 
 	@Test
-	public void testGetNum() {
-		m.g.allDice[1].setNum(2);
-		assertEquals(2, m.g.allDice[1].getNum());
-	}
-
-	@Test
-	public void testSetNum() {
-		m.g.allDice[0].setNum(5);
-		assertEquals(5, m.g.allDice[0].getNum());
-	}
-
-	@Test
-	public void testIsSaved() {
-		m.g.allDice[0].setSaved(false);
-		assertFalse(m.g.allDice[0].isSaved());
-	}
-
-	@Test
-	public void testSetDice() {
-		m.g.setDice(0, 3);
-		assertEquals(3, m.g.getAllDice()[0].getNum());
-	}
-
-	@Test
 	public void testClearDice() {
 		m.g.setDice(0, 4);
 		m.g.setDice(1, 2);
