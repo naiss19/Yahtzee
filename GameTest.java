@@ -1,14 +1,12 @@
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+
 
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.After;
-
-
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class GameTest {
     MainFrame m;
@@ -18,9 +16,14 @@ public class GameTest {
         return 1 + random.nextInt(6);
     }
 
-    @Before
+    @BeforeEach
     public void createGame() {
         m = new MainFrame();
+    }
+
+    @After
+    public void end() {
+        m = null;
     }
 
     public void testSimple(int num) {
